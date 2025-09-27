@@ -13,67 +13,65 @@ typedef struct
     float alpha;
     float size;
     float rotation;
+    float velocity;
+    float acceleration;
     bool active;
 } Particle;
+
+void updateParticle(Particle& particle)
+{
+}
 
 int main()
 {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Particles");
     SetTargetFPS(60);
 
-    Particle particles[MAX_PARTICLES] = { 0 };
+    Particle particle = { 0 };
 
-    for (auto i = 0; i < MAX_PARTICLES; i++)
-    {
-        particles[i].position = (Vector2) { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 4.0f };
-        particles[i].color = (Color) { 255, 255, 255, 255 };
-        particles[i].alpha = 1.0f;
-        particles[i].size = 0.5f;
-        particles[i].rotation = 0.0f;
-        particles[i].active = true;
-    }
+    particle.position = Vector2 { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 4.0f };
+    particle.color = (Color) { 255, 255, 255, 255 };
+    particle.alpha = 1.0f;
+    particle.size = 0.5f;
+    particle.rotation = 0.0f;
+    particle.active = true;
 
     Texture2D flare = LoadTexture(ASSETS_PATH "particle_texture.png");
 
     auto gravity = 3.0f;
     while (!WindowShouldClose())
     {
-        for (int i = 0; i < MAX_PARTICLES; i++)
+        if (particle.active)
         {
-            if (particles[i].active)
-            {
-                particles[i].position.y += gravity/2;
-                particles[i].alpha -= 0.005f;
+            particle.position.y += gravity / 2;
+            particle.alpha -= 0.005f;
 
-                if (particles[i].alpha <= 0.0f) particles[i].active = false;
+            if (particle.alpha <= 0.0f) particle.active = false;
 
-                particles[i].rotation += 2.0f;
-            }
+            particle.rotation += 2.0f;
         }
 
         BeginDrawing();
 
         ClearBackground(Color { 24, 24, 24, 255 });
 
-        for (auto i = 0; i < MAX_PARTICLES; i++)
+
+        if (particle.active)
         {
-            if (particles[i].active)
-            {
-                DrawTexturePro(
-                    flare,
-                    (Rectangle) { 0.0f, 0.0f, (float) flare.width, (float) flare.height },
-                    (Rectangle) {
-                        particles[i].position.x,
-                        particles[i].position.y,
-                        flare.width * particles[i].size,
-                        flare.height * particles[i].size
-                    },
-                    (Vector2) {
-                        (float) (flare.width * particles[i].size / 2.0f),
-                        (float) (flare.height * particles[i].size / 2.0f)
-                    }, particles[i].rotation,
-                    Fade(particles[i].color, particles[i].alpha));
-            }
+            DrawTexturePro(
+                flare,
+                (Rectangle) { 0.0f, 0.0f, (float) flare.width, (float) flare.height },
+                (Rectangle) {
+                    particle.position.x,
+                    particle.position.y,
+                    flare.width * particle.size,
+                    flare.height * particle.size
+                },
+                (Vector2) {
+                    (float) (flare.width * particle.size / 2.0f),
+                    (float) (flare.height * particle.size / 2.0f)
+                }, particle.rotation,
+                Fade(particle.color, particle.alpha));
         }
 
         EndDrawing();
