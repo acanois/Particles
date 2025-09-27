@@ -33,14 +33,8 @@ public:
         UnloadTexture(m_texture);
     }
 
-    void update()
+    void update(float gravity)
     {
-    }
-
-    void draw()
-    {
-        auto gravity = 3.0f;
-
         if (m_active)
         {
             m_position.y += gravity / 2;
@@ -50,37 +44,51 @@ public:
 
             m_rotation += 2.0f;
         }
+    }
+
+    void draw()
+    {
         if (m_active)
         {
             DrawTexturePro(
                 m_texture,
-                (Rectangle) { 0.0f, 0.0f, (float) m_texture.width, (float) m_texture.height },
-                (Rectangle) {
+                Rectangle {
+                    0.0f,
+                    0.0f,
+                    static_cast<float>(m_texture.width),
+                    static_cast<float>(m_texture.height)
+                },
+                Rectangle {
                     m_position.x,
                     m_position.y,
                     m_texture.width * m_size,
                     m_texture.height * m_size
                 },
-                (Vector2) {
-                    (float) (m_texture.width * m_size / 2.0f),
-                    (float) (m_texture.height * m_size / 2.0f)
+                Vector2 {
+                    m_texture.width * m_size / 2.0f,
+                    m_texture.height * m_size / 2.0f
                 }, m_rotation,
                 Fade(m_color, m_alpha));
         }
     }
 
+    bool alive() const
+    {
+        return m_alpha > 0.0f;
+    }
+
 private:
-    Vector2 m_position;
+    Vector2 m_position { 0.0f, 0.0f };
 
-    Texture2D m_texture;
+    Texture2D m_texture { 0 };
 
-    Color m_color;
+    Color m_color { 0 };
 
-    float m_alpha;
-    float m_size;
-    float m_rotation;
-    float m_velocity;
-    float m_acceleration;
+    float m_alpha { 0.0f };
+    float m_size { 0.0f };
+    float m_rotation { 0.0f };
+    float m_velocity { 0.0f };
+    float m_acceleration { 0.0f };
 
-    bool m_active;
+    bool m_active { true };
 };
