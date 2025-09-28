@@ -4,91 +4,86 @@
 
 #pragma once
 #include "raylib.h"
+#include "raymath.h"
 
 class Particle
 {
 public:
     Particle(Vector2 position,
+             Vector2 velocity,
+             Vector2 acceleration,
              Color color,
              float alpha,
              float size,
              float rotation,
-             float velocity,
-             float acceleration,
              bool active
-    ) : m_position(position),
-        m_color(color),
-        m_alpha(alpha),
-        m_size(size),
-        m_rotation(rotation),
-        m_velocity(velocity),
-        m_acceleration(acceleration),
-        m_active(active),
-        m_texture(LoadTexture(ASSETS_PATH "particle_texture.png"))
+    ) : position(position),
+        velocity(velocity),
+        acceleration(acceleration),
+        color(color),
+        alpha(alpha),
+        size(size),
+        rotation(rotation),
+        active(active)
     {
     }
 
-    ~Particle()
-    {
-        UnloadTexture(m_texture);
-    }
+    ~Particle() = default;
+
+    Particle(const Particle& other) = default;
+
+    Particle& operator=(const Particle& other) = default;
+
+    Particle(Particle&& other) noexcept = default;
+
+    Particle& operator=(Particle&& other) noexcept = default;
+
 
     void update(float gravity)
     {
-        if (m_active)
+        if (active)
         {
-            m_position.y += gravity / 2;
-            m_alpha -= 0.005f;
+            velocity = Vector2Add(velocity, acceleration);
+            position = Vector2Add(position, velocity);
+            acceleration *= 0.0f;
+            // position.y += gravity / 2;
+            color.a -= 2;
 
-            if (m_alpha <= 0.0f) m_active = false;
+            if (color.a <= 0) active = false;
 
-            m_rotation += 2.0f;
+            // rotation += 2.0f;
         }
     }
 
     void draw()
     {
-        if (m_active)
+        if (active)
         {
-            DrawTexturePro(
-                m_texture,
-                Rectangle {
-                    0.0f,
-                    0.0f,
-                    static_cast<float>(m_texture.width),
-                    static_cast<float>(m_texture.height)
-                },
-                Rectangle {
-                    m_position.x,
-                    m_position.y,
-                    m_texture.width * m_size,
-                    m_texture.height * m_size
-                },
-                Vector2 {
-                    m_texture.width * m_size / 2.0f,
-                    m_texture.height * m_size / 2.0f
-                }, m_rotation,
-                Fade(m_color, m_alpha));
+            DrawCircle(
+                static_cast<int>(position.x),
+                static_cast<int>(position.y),
+                2.0f,
+                color
+            );
         }
     }
 
-    bool alive() const
+    [[nodiscard]] bool alive() const
     {
-        return m_alpha > 0.0f;
+        return color.a > 0;
     }
 
 private:
-    Vector2 m_position { 0.0f, 0.0f };
+    Vector2 position { 0.0f, 0.0f };
+    Vector2 velocity { 0.0f };
+    Vector2 acceleration { 0.0f };
 
-    Texture2D m_texture { 0 };
+    Color color {};
 
-    Color m_color { 0 };
+    float alpha { 0.0f };
+    float size { 0.0f };
+    float rotation { 0.0f };
 
-    float m_alpha { 0.0f };
-    float m_size { 0.0f };
-    float m_rotation { 0.0f };
-    float m_velocity { 0.0f };
-    float m_acceleration { 0.0f };
 
-    bool m_active { true };
+    bool active { true };
 };

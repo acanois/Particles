@@ -11,33 +11,46 @@
 class ParticleSystem
 {
 public:
-    ParticleSystem(Vector2 position)
-        : m_position(position)
+    explicit ParticleSystem(const Vector2 position)
+        : position(position)
     {
     }
 
-    void addParticle(Particle particle)
+    void addParticle()
     {
-        m_particles.push_back(particle);
+        auto velocity = Vector2 {
+            static_cast<float>(GetRandomValue(-1000, 1000)) / 1000.0f,
+            static_cast<float>(GetRandomValue(-1000, 1000)) / 1000.0f
+        };
+        particles.emplace_back(std::make_unique<Particle>(
+            Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f }, // Position
+            velocity, // Velocity
+            Vector2 { 0.0f, 0.0f }, // Acceleration
+            Color { 255, 255, 255, 255 }, // Color
+            1.0f, // Alpha
+            0.5f, // Size
+            0.0f, // Rotation
+            true // Active
+        ));
     }
 
     void run()
     {
-        for (auto&& particle: m_particles)
+        for (const auto& particle: particles)
         {
             particle->update(3.0f);
             particle->draw();
-
-            if (!particle->alive())
-                m_particles.erase(
-                    std::ranges::remove(m_particles, particle)
-                    .begin()
-                );
         }
+
+        // Putting this inside the for loop would cause iterator invalidation
+        std::erase_if(particles, [] (const std::unique_ptr<Particle>& particle) {
+            return !particle->alive();
+        });
     }
 
 private:
-    Vector2 m_position;
+    Vector2 position;
+    // Texture2D texture {};
 
-    std::vector<std::unique_ptr<Particle>> m_particles;
+    std::vector<std::unique_ptr<Particle> > particles;
 };
