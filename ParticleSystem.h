@@ -29,7 +29,6 @@ public:
             Color { 255, 255, 255, 255 }, // Color
             1.0f, // Alpha
             0.5f, // Size
-            0.0f, // Rotation
             true // Active
         ));
     }
@@ -38,7 +37,7 @@ public:
     {
         for (const auto& particle: particles)
         {
-            particle->update(3.0f);
+            particle->update();
             particle->draw();
         }
 
@@ -46,6 +45,11 @@ public:
         std::erase_if(particles, [] (const std::unique_ptr<Particle>& particle) {
             return !particle->alive();
         });
+    }
+
+    [[nodiscard]] int getNumParticles() const
+    {
+        return static_cast<int>(particles.size());
     }
 
 private:

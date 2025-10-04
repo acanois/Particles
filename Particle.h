@@ -15,7 +15,6 @@ public:
              Color color,
              float alpha,
              float size,
-             float rotation,
              bool active
     ) : position(position),
         velocity(velocity),
@@ -23,7 +22,6 @@ public:
         color(color),
         alpha(alpha),
         size(size),
-        rotation(rotation),
         active(active)
     {
     }
@@ -39,19 +37,20 @@ public:
     Particle& operator=(Particle&& other) noexcept = default;
 
 
-    void update(float gravity)
+    void update()
     {
         if (active)
         {
             velocity = Vector2Add(velocity, acceleration);
             position = Vector2Add(position, velocity);
             acceleration *= 0.0f;
-            // position.y += gravity / 2;
-            color.a -= 2;
+            color.a -= 1;
+            lifespan -= 1.0f / 255.0f;
 
-            if (color.a <= 0) active = false;
-
-            // rotation += 2.0f;
+            if (lifespan <= 0)
+            {
+                active = false;
+            }
         }
     }
 
@@ -70,7 +69,7 @@ public:
 
     [[nodiscard]] bool alive() const
     {
-        return color.a > 0;
+        return lifespan > 0;
     }
 
 private:
@@ -82,8 +81,7 @@ private:
 
     float alpha { 0.0f };
     float size { 0.0f };
-    float rotation { 0.0f };
-
+    float lifespan { 1.0f };
 
     bool active { true };
 };
