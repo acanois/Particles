@@ -9,13 +9,13 @@
 class Particle
 {
 public:
-    Particle(Vector2 position,
-             Vector2 velocity,
-             Vector2 acceleration,
-             Color color,
-             float alpha,
-             float size,
-             bool active
+    Particle(const Vector2 position,
+             const Vector2 velocity,
+             const Vector2 acceleration,
+             const Color color,
+             const float alpha,
+             const float size,
+             const bool active
     ) : position(position),
         velocity(velocity),
         acceleration(acceleration),
@@ -54,7 +54,7 @@ public:
         }
     }
 
-    void draw()
+    void draw() const
     {
         if (active)
         {

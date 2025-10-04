@@ -17,7 +17,7 @@ int main()
     SetTargetFPS(FPS);
 
     auto particleSystem = std::make_unique<ParticleSystem>(
-        Vector2 { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f }
+        Vector2 { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 20.0f }
     );
 
     auto frameCount = 0;
@@ -25,16 +25,16 @@ int main()
     {
         ++frameCount;
 
-        if (frameCount % 20 == 0 && particleSystem->getNumParticles() <= MAX_PARTICLES)
-        {
-            particleSystem->addParticle();
-        }
+        particleSystem->addParticle();
 
         BeginDrawing();
 
         ClearBackground(Color { 24, 24, 24, 255 });
 
         particleSystem->run();
+
+        const auto text = TextFormat("Particles: (%u)", particleSystem->getNumParticles());
+        DrawText(text, 10, 10, 20, ORANGE);
 
         EndDrawing();
     }

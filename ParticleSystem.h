@@ -20,10 +20,10 @@ public:
     {
         auto velocity = Vector2 {
             static_cast<float>(GetRandomValue(-1000, 1000)) / 1000.0f,
-            static_cast<float>(GetRandomValue(-1000, 1000)) / 1000.0f
+            static_cast<float>(GetRandomValue(33, 1000)) / 1000.0f
         };
         particles.emplace_back(std::make_unique<Particle>(
-            Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f }, // Position
+            Vector2 { position.x, position.y }, // Position
             velocity, // Velocity
             Vector2 { 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, 255 }, // Color
@@ -47,9 +47,10 @@ public:
         });
     }
 
-    [[nodiscard]] int getNumParticles() const
+    [[nodiscard]] unsigned long getNumParticles() const
     {
-        return static_cast<int>(particles.size());
+        std::cout << particles.size() << std::endl;
+        return particles.size();
     }
 
 private:
