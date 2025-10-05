@@ -15,14 +15,16 @@ public:
              const Color color,
              const float alpha,
              const float size,
-             const bool active
+             const float mass
     ) : position(position),
         velocity(velocity),
         acceleration(acceleration),
         color(color),
         alpha(alpha),
         size(size),
-        active(active)
+        mass(mass),
+        active(true),
+        lifespan(1.0f)
     {
     }
 
@@ -41,16 +43,23 @@ public:
     {
         if (active)
         {
+            auto distanceToCenter = Vector2Subtract(
+                position,
+                Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f }
+            );
+            auto distanceMag = Vector2Length(distanceToCenter);
+            auto colorShift = Remap(distanceMag, 0, (1280.0f / 2.0f), 50.0f, 255.0f);
             velocity = Vector2Add(velocity, acceleration);
             position = Vector2Add(position, velocity);
             acceleration *= 0.0f;
-            color.a -= 1;
-            lifespan -= 1.0f / 255.0f;
-
-            if (lifespan <= 0)
-            {
-                active = false;
-            }
+            color.g = static_cast<unsigned char>(colorShift);
+            color.b = static_cast<unsigned char>(colorShift);
+            // lifespan -= 1.0f / (255.0f * 5.0f);
+            //
+            // if (lifespan <= 0)
+            // {
+            //     active = false;
+            // }
         }
     }
 
@@ -67,21 +76,38 @@ public:
         }
     }
 
+    void applyForce(Vector2 force)
+    {
+        Vector2 f = Vector2Divide(force, Vector2 { mass, mass });
+        acceleration = Vector2Add(acceleration, f);
+    }
+
+    [[nodiscard]] Vector2 getPosition() const
+    {
+        return position;
+    }
+
     [[nodiscard]] bool alive() const
     {
         return lifespan > 0;
     }
 
+    [[nodiscard]] float getMass() const
+    {
+        return mass;
+    }
+
 private:
-    Vector2 position { 0.0f, 0.0f };
-    Vector2 velocity { 0.0f };
-    Vector2 acceleration { 0.0f };
+    Vector2 position;
+    Vector2 velocity;
+    Vector2 acceleration;
 
-    Color color {};
+    Color color;
 
-    float alpha { 0.0f };
-    float size { 0.0f };
-    float lifespan { 1.0f };
+    float alpha;
+    float size;
+    float lifespan;
+    float mass;
 
-    bool active { true };
+    bool active;
 };

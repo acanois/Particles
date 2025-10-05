@@ -41,6 +41,7 @@ add_executable(${PROJECT_NAME}
     main.cpp
     Particle.h
     ParticleSystem.h
+    Attractor.h
 )
 
 # Sources

@@ -25,7 +25,8 @@ int main()
     {
         ++frameCount;
 
-        particleSystem->addParticle();
+        if (particleSystem->getNumParticles() < 750)
+            particleSystem->addParticle();
 
         BeginDrawing();
 
@@ -33,7 +34,10 @@ int main()
 
         particleSystem->run();
 
-        const auto text = TextFormat("Particles: (%u)", particleSystem->getNumParticles());
+        const auto text = TextFormat(
+            "Particles: (%u)",
+            particleSystem->getNumParticles()
+        );
         DrawText(text, 10, 10, 20, ORANGE);
 
         EndDrawing();
