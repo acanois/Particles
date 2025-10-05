@@ -20,17 +20,14 @@ int main()
         Vector2 { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 20.0f }
     );
 
-    auto frameCount = 0;
     while (!WindowShouldClose())
     {
-        ++frameCount;
+        ClearBackground(Color { 28, 24, 42, 255 });
 
         if (particleSystem->getNumParticles() < 750)
             particleSystem->addParticle();
 
         BeginDrawing();
-
-        ClearBackground(Color { 24, 24, 24, 255 });
 
         particleSystem->run();
 

@@ -43,23 +43,26 @@ public:
     {
         if (active)
         {
-            auto distanceToCenter = Vector2Subtract(
+            const auto distanceToCenter = Vector2Subtract(
                 position,
                 Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f }
             );
-            auto distanceMag = Vector2Length(distanceToCenter);
-            auto colorShift = Remap(distanceMag, 0, (1280.0f / 2.0f), 50.0f, 255.0f);
+            const auto distanceMag = Vector2Length(distanceToCenter);
+            const auto colorShift = Remap(
+                distanceMag, // Input
+                720.0 / 20.0f, // Input min
+                (1280.0f / 2.5f), // Input max
+                0.0f, // Output min
+                255.0f // Output max
+            );
+
             velocity = Vector2Add(velocity, acceleration);
             position = Vector2Add(position, velocity);
+
             acceleration *= 0.0f;
+
             color.g = static_cast<unsigned char>(colorShift);
             color.b = static_cast<unsigned char>(colorShift);
-            // lifespan -= 1.0f / (255.0f * 5.0f);
-            //
-            // if (lifespan <= 0)
-            // {
-            //     active = false;
-            // }
         }
     }
 
