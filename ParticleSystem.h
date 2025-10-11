@@ -24,10 +24,10 @@ public:
 
     void addParticle()
     {
-        auto velocityScale = 2.0f;
-        auto startVelocity = static_cast<float>(GetRandomValue(500, 1000)) / 1000.0f;
-        auto direction = GetRandomValue(0, 1) == 0 ? -1.0f : 1.0f;
-        auto alpha = static_cast<unsigned char>(GetRandomValue(100, 255));
+        const auto velocityScale = 2.0f;
+        const auto startVelocity = static_cast<float>(GetRandomValue(500, 1000)) / 1000.0f;
+        const auto direction = GetRandomValue(0, 1) == 0 ? -1.0f : 1.0f;
+        const auto alpha = static_cast<unsigned char>(GetRandomValue(100, 255));
         auto velocity = Vector2 {
             velocityScale * startVelocity * direction,
             // static_cast<float>(GetRandomValue(0, 0)) / 1000.0f,
@@ -39,7 +39,7 @@ public:
             Vector2 { 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, alpha }, // Color
             1.0f, // Alpha
-            0.5f, // Size
+            0.01f, // Size
             0.1f // Mass
         ));
     }

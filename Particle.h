@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include "raylib.h"
 #include "raymath.h"
 
@@ -22,9 +23,9 @@ public:
         color(color),
         alpha(alpha),
         size(size),
+        lifespan(1.0f),
         mass(mass),
-        active(true),
-        lifespan(1.0f)
+        active(true)
     {
     }
 
@@ -51,7 +52,7 @@ public:
             const auto colorShift = Remap(
                 distanceMag, // Input
                 720.0 / 20.0f, // Input min
-                (1280.0f / 2.5f), // Input max
+                1280.0f / 2.5f, // Input max
                 0.0f, // Output min
                 255.0f // Output max
             );
