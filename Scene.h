@@ -6,6 +6,7 @@
 
 #include "raylib.h"
 
+#include "AppConfig.h"
 #include "ParticleSystem.h"
 
 class Scene
@@ -13,11 +14,18 @@ class Scene
 public:
     Scene()
         : particleSystem(std::make_unique<ParticleSystem>(
-            Vector2 { width / 2.0f, width / 20.0f }
+            Vector2 {
+                cfg.getConfig()["screenWidth"] / 2.0f,
+                cfg.getConfig()["screenHeight"] / 20.0f
+            }
         ))
     {
-        InitWindow(width, height, "Particles");
-        SetTargetFPS(fps);
+        InitWindow(
+            cfg.getConfig()["screenWidth"],
+            cfg.getConfig()["screenHeight"],
+            "Particles"
+        );
+        SetTargetFPS(cfg.getConfig()["fps"]);
     }
 
     ~Scene()
@@ -57,10 +65,12 @@ public:
     }
 
 private:
-    static constexpr int width { 1280 };
-    static constexpr int height { 720 };
+    // static constexpr int width { 1280 };
+    // static constexpr int height { 720 };
+    //
+    // static constexpr int fps { 120 };
 
-    static constexpr int fps { 120 };
+    AppConfig& cfg = AppConfig::getInstance();
 
     std::unique_ptr<ParticleSystem> particleSystem { nullptr };
 };

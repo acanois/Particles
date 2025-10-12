@@ -42,6 +42,7 @@ add_executable(${PROJECT_NAME}
     Particle.h
     ParticleSystem.h
     Attractor.h
+    AppConfig.h
 )
 
 # Sources

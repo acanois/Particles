@@ -33,13 +33,14 @@ public:
             // static_cast<float>(GetRandomValue(0, 0)) / 1000.0f,
             0.0f
         };
+        const auto xPos = static_cast<float>(GetRandomValue(0, 1280));
         particles.emplace_back(std::make_unique<Particle>(
-            Vector2 { position.x, position.y }, // Position
+            Vector2 { xPos, position.y }, // Position
             velocity, // Velocity
             Vector2 { 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, alpha }, // Color
             1.0f, // Alpha
-            0.01f, // Size
+            1.0f, // Size
             0.1f // Mass
         ));
     }
@@ -67,7 +68,6 @@ public:
 
 private:
     Vector2 position;
-    // Texture2D texture {};
 
     std::vector<std::unique_ptr<Particle> > particles;
 
