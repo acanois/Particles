@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include "AppConfig.h"
 #include "Particle.h"
 #include "Attractor.h"
 
@@ -17,20 +18,19 @@ public:
           attractor(
               std::make_unique<Attractor>(
                   Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f },
-                  1.0f
+                  0.005f
               ))
     {
     }
 
     void addParticle()
     {
-        const auto velocityScale = 2.0f;
+        const auto velocityScale = 1.0f;
         const auto startVelocity = static_cast<float>(GetRandomValue(500, 1000)) / 1000.0f;
         const auto direction = GetRandomValue(0, 1) == 0 ? -1.0f : 1.0f;
         const auto alpha = static_cast<unsigned char>(GetRandomValue(100, 255));
         auto velocity = Vector2 {
             velocityScale * startVelocity * direction,
-            // static_cast<float>(GetRandomValue(0, 0)) / 1000.0f,
             0.0f
         };
         const auto xPos = static_cast<float>(GetRandomValue(0, 1280));
@@ -40,8 +40,8 @@ public:
             Vector2 { 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, alpha }, // Color
             1.0f, // Alpha
-            1.0f, // Size
-            0.1f // Mass
+            2.0f, // Size
+            1.0f // Mass
         ));
     }
 
@@ -49,16 +49,11 @@ public:
     {
         for (const auto& particle: particles)
         {
-            auto force = attractor->attract(*particle);
+            const auto force = attractor->attract(*particle);
             particle->applyForce(force);
             particle->update();
             particle->draw();
         }
-
-        // Putting this inside the for loop would cause iterator invalidation
-        // std::erase_if(particles, [] (const std::unique_ptr<Particle>& particle) {
-        //     return !particle->alive();
-        // });
     }
 
     [[nodiscard]] unsigned long getNumParticles() const
@@ -67,6 +62,8 @@ public:
     }
 
 private:
+    AppConfig& cfg = AppConfig::getInstance();
+
     Vector2 position;
 
     std::vector<std::unique_ptr<Particle> > particles;

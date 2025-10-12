@@ -15,8 +15,8 @@ public:
     Scene()
         : particleSystem(std::make_unique<ParticleSystem>(
             Vector2 {
-                cfg.getConfig()["screenWidth"] / 2.0f,
-                cfg.getConfig()["screenHeight"] / 20.0f
+                static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
+                static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
             }
         ))
     {
@@ -47,7 +47,7 @@ public:
         {
             ClearBackground(Color { 28, 24, 42, 255 });
 
-            if (particleSystem->getNumParticles() < 750)
+            if (particleSystem->getNumParticles() < 3000)
                 particleSystem->addParticle();
 
             BeginDrawing();
@@ -65,11 +65,6 @@ public:
     }
 
 private:
-    // static constexpr int width { 1280 };
-    // static constexpr int height { 720 };
-    //
-    // static constexpr int fps { 120 };
-
     AppConfig& cfg = AppConfig::getInstance();
 
     std::unique_ptr<ParticleSystem> particleSystem { nullptr };

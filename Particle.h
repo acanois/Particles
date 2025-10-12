@@ -7,6 +7,8 @@
 #include "raylib.h"
 #include "raymath.h"
 
+#include "AppConfig.h"
+
 class Particle
 {
 public:
@@ -46,13 +48,16 @@ public:
         {
             const auto distanceToCenter = Vector2Subtract(
                 position,
-                Vector2 { 1280.0f / 2.0f, 720.0f / 2.0f }
+                Vector2 {
+                    static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
+                    static_cast<float>(cfg.getConfig()["screenHeight"]) / 2.0f
+                }
             );
             const auto distanceMag = Vector2Length(distanceToCenter);
             const auto colorShift = Remap(
                 distanceMag, // Input
-                720.0 / 20.0f, // Input min
-                1280.0f / 2.5f, // Input max
+                static_cast<float>(cfg.getConfig()["screenWidth"]) * 0.6f, // Input min
+                0.0f, // Input max
                 0.0f, // Output min
                 255.0f // Output max
             );
@@ -63,7 +68,7 @@ public:
             acceleration *= 0.0f;
 
             color.g = static_cast<unsigned char>(colorShift);
-            color.b = static_cast<unsigned char>(colorShift);
+            color.r = static_cast<unsigned char>(colorShift);
         }
     }
 
@@ -74,7 +79,7 @@ public:
             DrawCircle(
                 static_cast<int>(position.x),
                 static_cast<int>(position.y),
-                2.0f,
+                size,
                 color
             );
         }
@@ -102,6 +107,8 @@ public:
     }
 
 private:
+    AppConfig& cfg = AppConfig::getInstance();
+
     Vector2 position;
     Vector2 velocity;
     Vector2 acceleration;
