@@ -15,12 +15,12 @@ class Scene
 public:
     Scene()
         : particleSystem(std::make_unique<ParticleSystem>(
-            Vector2 {
-                static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
-                static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
-            }
-        )),
-        oscHandler(std::make_unique<OscHandler>())
+              Vector2 {
+                  static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
+                  static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
+              }
+          )),
+          oscHandler(std::make_unique<OscHandler>())
     {
         InitWindow(
             cfg.getConfig()["screenWidth"],
@@ -49,18 +49,24 @@ public:
         {
             ClearBackground(Color { 32, 32, 64, 255 });
 
-            if (particleSystem->getNumParticles() < 3000)
+            if (particleSystem->getNumParticles() < 2700)
                 particleSystem->addParticle();
 
             BeginDrawing();
 
             particleSystem->run();
 
-            const auto text = TextFormat(
+            const auto particleCount = TextFormat(
                 "Particles: (%u)",
                 particleSystem->getNumParticles()
             );
-            DrawText(text, 10, 10, 20, ORANGE);
+            DrawText(particleCount, 10, 10, 20, ORANGE);
+
+            const auto frameRate = TextFormat(
+                "Framerate: (%u)",
+                GetFPS()
+            );
+            DrawText(frameRate, 200, 10, 20, ORANGE);
 
             EndDrawing();
         }

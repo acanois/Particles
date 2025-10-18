@@ -26,7 +26,7 @@ public:
     void addParticle()
     {
         const auto velocityScale = 1.0f;
-        const auto startVelocity = static_cast<float>(GetRandomValue(500, 1000)) / 1000.0f;
+        const auto startVelocity = static_cast<float>(GetRandomValue(0, 1000)) / 1000.0f;
         const auto direction = GetRandomValue(0, 1) == 0 ? -1.0f : 1.0f;
         const auto alpha = static_cast<unsigned char>(GetRandomValue(100, 255));
         auto velocity = Vector2 {
@@ -40,7 +40,7 @@ public:
             Vector2 { 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, alpha }, // Color
             1.0f, // Alpha
-            2.0f, // Size
+            1.0f, // Size
             1.0f // Mass
         ));
     }
