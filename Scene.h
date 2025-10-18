@@ -8,6 +8,7 @@
 
 #include "AppConfig.h"
 #include "ParticleSystem.h"
+#include "OscHandler.h"
 
 class Scene
 {
@@ -18,7 +19,8 @@ public:
                 static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
                 static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
             }
-        ))
+        )),
+        oscHandler(std::make_unique<OscHandler>())
     {
         InitWindow(
             cfg.getConfig()["screenWidth"],
@@ -45,7 +47,7 @@ public:
     {
         while (!WindowShouldClose())
         {
-            ClearBackground(Color { 28, 24, 42, 255 });
+            ClearBackground(Color { 32, 32, 64, 255 });
 
             if (particleSystem->getNumParticles() < 3000)
                 particleSystem->addParticle();
@@ -66,6 +68,8 @@ public:
 
 private:
     AppConfig& cfg = AppConfig::getInstance();
+
+    std::unique_ptr<OscHandler> oscHandler { nullptr };
 
     std::unique_ptr<ParticleSystem> particleSystem { nullptr };
 };

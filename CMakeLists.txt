@@ -31,8 +31,11 @@ else ()
     message(STATUS "Using local ${RAYLIB_LIB}")
 endif ()
 
+find_package(glfw3 CONFIG REQUIRED)
+find_package(liblo CONFIG REQUIRED)
+
 # Include directory
-#set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include")
+set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Shaders directory
 #set(SHADERS_DIR resources/shaders)
@@ -43,6 +46,7 @@ add_executable(${PROJECT_NAME}
     ParticleSystem.h
     Attractor.h
     AppConfig.h
+    OscHandler.h
 )
 
 # Sources
@@ -51,7 +55,10 @@ target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 # Include
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${RAYLIB_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE liblo::liblo liblo::liblo_static)
+
 
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
