@@ -11,7 +11,7 @@
 class OscHandler
 {
 public:
-    OscHandler() : serverThread(7000)
+    explicit OscHandler(const int port) : serverThread(port)
     {
     }
 
@@ -36,6 +36,13 @@ public:
     {
         // Wrapper for start()
         serverThread.start();
+    }
+
+    void sendMessage(int data)
+    {
+        const auto port = serverThread.port();
+        lo::Address a("localhost", port);
+        a.send("example", "i", data);
     }
 
 private:

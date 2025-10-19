@@ -14,7 +14,7 @@ class Scene
 {
 public:
     Scene()
-        : oscHandler(std::make_unique<OscHandler>()),
+        : oscHandler(std::make_unique<OscHandler>(7000)),
           particleSystem(std::make_unique<ParticleSystem>(
               Vector2 {
                   static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
