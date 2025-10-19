@@ -2,7 +2,9 @@
 // Created by David Richter on 10/5/25.
 //
 
-#include <math.h>
+#pragma once
+
+#include <cmath>
 
 #include "raylib.h"
 #include "raymath.h"
@@ -11,13 +13,13 @@
 class Attractor
 {
 public:
-    Attractor(Vector2 position, float mass)
+    Attractor(const Vector2 position, const float mass)
         : position(position),
           mass(mass)
     {
     }
 
-    Vector2 attract(const Particle& particle)
+    [[nodiscard]] Vector2 attract(const Particle& particle) const
     {
         const auto force = Vector2Subtract(position, particle.getPosition());
         const auto magnitude = Vector2Length(force);

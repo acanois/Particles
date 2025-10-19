@@ -14,13 +14,13 @@ class Scene
 {
 public:
     Scene()
-        : particleSystem(std::make_unique<ParticleSystem>(
+        : oscHandler(std::make_unique<OscHandler>()),
+          particleSystem(std::make_unique<ParticleSystem>(
               Vector2 {
                   static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
                   static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
               }
-          )),
-          oscHandler(std::make_unique<OscHandler>())
+          ))
     {
         InitWindow(
             cfg.getConfig()["screenWidth"],

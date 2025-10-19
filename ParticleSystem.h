@@ -33,19 +33,26 @@ public:
             velocityScale * startVelocity * direction,
             0.0f
         };
+
+        const auto letterBox = 20;
         const auto xPos = static_cast<float>(GetRandomValue(0, 1280));
-        particles.emplace_back(std::make_unique<Particle>(
-            Vector2 { xPos, position.y }, // Position
-            velocity, // Velocity
-            Vector2 { 0.0f, 0.0f }, // Acceleration
-            Color { 255, 255, 255, alpha }, // Color
-            1.0f, // Alpha
-            1.0f, // Size
-            1.0f // Mass
-        ));
+        const auto yPos = GetRandomValue(0, 1) == 0
+                              ? letterBox
+                              : static_cast<float>(cfg.getConfig()["screenHeight"] - letterBox);
+
+        particles.emplace_back(
+            std::make_unique<Particle>(
+                Vector2 { xPos, yPos }, // Position
+                velocity, // Velocity
+                Vector2 { 0.0f, 0.0f }, // Acceleration
+                Color { 255, 255, 255, alpha }, // Color
+                1.0f, // Alpha
+                1.0f, // Size
+                1.0f // Mass
+            ));
     }
 
-    void run()
+    void run() const
     {
         for (const auto& particle: particles)
         {
