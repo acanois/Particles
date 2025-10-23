@@ -45,13 +45,16 @@ public:
 
     void run() const
     {
+        auto frameCount = 0;
         while (!WindowShouldClose())
         {
-            oscHandler->sendMessage(GetFPS());
             ClearBackground(Color { 32, 32, 64, 255 });
 
-            if (particleSystem->getNumParticles() < 2700)
+            if (particleSystem->getNumParticles() < 2700 && frameCount % 60 == 0)
+            {
                 particleSystem->addParticle();
+                oscHandler->sendMessage(1.0);
+            }
 
             BeginDrawing();
 
@@ -70,6 +73,8 @@ public:
             DrawText(frameRate, 200, 10, 20, ORANGE);
 
             EndDrawing();
+
+            frameCount++;
         }
     }
 

@@ -19,7 +19,6 @@ public:
         const std::function<void()>& input,
         const std::function<void()>& cleanup)
     {
-        // Wrapper for set_callbacks()
         serverThread.set_callbacks(input, cleanup);
     }
 
@@ -28,20 +27,18 @@ public:
         const std::string& type,
         const std::function<void(lo_arg** argv, int)>& func)
     {
-        // Wrapper for add_method()
         serverThread.add_method(name, type, func);
     }
 
     void startThread()
     {
-        // Wrapper for start()
         serverThread.start();
     }
 
-    static void sendMessage(const int data)
+    static void sendMessage(const float data)
     {
         const lo::Address a("localhost", 7001);
-        const auto messageSend = a.send("example", "i", data);
+        const auto messageSend = a.send("/pSpawn", "f", data);
     }
 
 private:
