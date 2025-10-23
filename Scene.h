@@ -14,7 +14,7 @@ class Scene
 {
 public:
     Scene()
-        : oscHandler(std::make_unique<OscHandler>(7000)),
+        : oscHandler(std::make_unique<OscHandler>()),
           particleSystem(std::make_unique<ParticleSystem>(
               Vector2 {
                   static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
@@ -47,6 +47,7 @@ public:
     {
         while (!WindowShouldClose())
         {
+            oscHandler->sendMessage(GetFPS());
             ClearBackground(Color { 32, 32, 64, 255 });
 
             if (particleSystem->getNumParticles() < 2700)
