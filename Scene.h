@@ -4,23 +4,26 @@
 
 #pragma once
 
+#include <lo/lo.h>
+#include <lo/lo_cpp.h>
+
 #include "raylib.h"
 
 #include "AppConfig.h"
 #include "ParticleSystem.h"
-#include "OscHandler.h"
 
 class Scene
 {
 public:
     Scene()
-        : oscHandler(std::make_unique<OscHandler>()),
-          particleSystem(std::make_unique<ParticleSystem>(
-              Vector2 {
-                  static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
-                  static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
-              }
-          ))
+        :
+        // oscHandler(std::make_unique<OscHandler>()),
+        particleSystem(std::make_unique<ParticleSystem>(
+            Vector2 {
+                static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
+                static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
+            }
+        ))
     {
         InitWindow(
             cfg.getConfig()["screenWidth"],
@@ -43,17 +46,37 @@ public:
 
     Scene& operator=(Scene&& other) noexcept = default;
 
+    void initOsc()
+    {
+        lo::ServerThread st(7000);
+
+        st.set_callbacks([&st]() { printf("Thread init: %p.\n", &st); },
+                         []() { printf("Thread cleanup.\n"); });
+
+        std::atomic<int> received(0);
+
+        st.add_method("/midi_note", "i",
+                      [&received] (lo_arg** argv, int)
+                      {
+                          std::cout << "midi_note (" << (++received) << "): "
+                              << argv[0]->i << std::endl;
+                      });
+
+        st.start();
+    }
+
     void run() const
     {
+
+
         auto frameCount = 0;
         while (!WindowShouldClose())
         {
             ClearBackground(Color { 32, 32, 64, 255 });
 
-            if (particleSystem->getNumParticles() < 2700 && frameCount % 60 == 0)
+            if (particleSystem->getNumParticles() < 2700 && frameCount % 10 == 0)
             {
                 particleSystem->addParticle();
-                oscHandler->sendMessage(1.0);
             }
 
             BeginDrawing();
@@ -80,8 +103,6 @@ public:
 
 private:
     AppConfig& cfg = AppConfig::getInstance();
-
-    std::unique_ptr<OscHandler> oscHandler { nullptr };
 
     std::unique_ptr<ParticleSystem> particleSystem { nullptr };
 };
