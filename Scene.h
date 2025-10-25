@@ -46,38 +46,35 @@ public:
 
     Scene& operator=(Scene&& other) noexcept = default;
 
-    void initOsc()
+    void run() const
     {
         lo::ServerThread st(7000);
 
         st.set_callbacks([&st]() { printf("Thread init: %p.\n", &st); },
                          []() { printf("Thread cleanup.\n"); });
 
-        std::atomic<int> received(0);
+        std::atomic<int> noteOn { 0 };
 
-        st.add_method("/midi_note", "i",
-                      [&received] (lo_arg** argv, int)
+        st.add_method("/note_on", "i",
+                      [&noteOn] (lo_arg** argv, int)
                       {
-                          std::cout << "midi_note (" << (++received) << "): "
-                              << argv[0]->i << std::endl;
+                          noteOn.store(argv[0]->i);
                       });
 
         st.start();
-    }
-
-    void run() const
-    {
-
 
         auto frameCount = 0;
         while (!WindowShouldClose())
         {
             ClearBackground(Color { 32, 32, 64, 255 });
 
-            if (particleSystem->getNumParticles() < 2700 && frameCount % 10 == 0)
-            {
+            // if (particleSystem->getNumParticles() < 2700)
+            // {
+            //     particleSystem->addParticle();
+            // }
+            if (noteOn.load() != 0)
                 particleSystem->addParticle();
-            }
+
 
             BeginDrawing();
 
@@ -97,7 +94,7 @@ public:
 
             EndDrawing();
 
-            frameCount++;
+            ++frameCount;
         }
     }
 
