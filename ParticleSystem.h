@@ -47,7 +47,7 @@ public:
                 Vector2 { 0.0f, 0.0f }, // Acceleration
                 Color { 255, 255, 255, alpha }, // Color
                 1.0f, // Alpha
-                1.0f, // Size
+                3.0f, // Size
                 1.0f // Mass
             ));
     }

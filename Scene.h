@@ -58,22 +58,22 @@ public:
         st.add_method("/note_on", "i",
                       [&noteOn] (lo_arg** argv, int)
                       {
-                          noteOn.store(argv[0]->i);
+                          noteOn = (argv[0]->i);
                       });
 
         st.start();
 
         auto frameCount = 0;
+        auto previousNote = 0;
+
         while (!WindowShouldClose())
         {
             ClearBackground(Color { 32, 32, 64, 255 });
 
-            // if (particleSystem->getNumParticles() < 2700)
-            // {
-            //     particleSystem->addParticle();
-            // }
-            if (noteOn.load() != 0)
+            const auto currentNote = noteOn.load();
+            if (currentNote != previousNote && previousNote == 0) {
                 particleSystem->addParticle();
+            }
 
 
             BeginDrawing();
@@ -93,7 +93,7 @@ public:
             DrawText(frameRate, 200, 10, 20, ORANGE);
 
             EndDrawing();
-
+            previousNote = currentNote;
             ++frameCount;
         }
     }
