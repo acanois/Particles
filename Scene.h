@@ -16,9 +16,7 @@ class Scene
 {
 public:
     Scene()
-        :
-        // oscHandler(std::make_unique<OscHandler>()),
-        particleSystem(std::make_unique<ParticleSystem>(
+        : particleSystem(std::make_unique<ParticleSystem>(
             Vector2 {
                 static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
                 static_cast<float>(cfg.getConfig()["screenHeight"]) / 20.0f
@@ -71,7 +69,8 @@ public:
             ClearBackground(Color { 32, 32, 64, 255 });
 
             const auto currentNote = noteOn.load();
-            if (currentNote != previousNote && previousNote == 0) {
+            if (currentNote != previousNote && previousNote == 0)
+            {
                 particleSystem->addParticle();
             }
 

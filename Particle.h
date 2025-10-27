@@ -12,24 +12,14 @@
 class Particle
 {
 public:
-    Particle(const Vector2 position,
-             const Vector2 velocity,
-             const Vector2 acceleration,
-             const Color color,
-             const float alpha,
-             const float size,
-             const float mass
-    ) : position(position),
-        velocity(velocity),
-        acceleration(acceleration),
-        color(color),
-        alpha(alpha),
-        size(size),
-        lifespan(1.0f),
-        mass(mass),
-        active(true)
-    {
-    }
+    Particle(Vector2 position,
+             Vector2 velocity,
+             Vector2 acceleration,
+             Color color,
+             float alpha,
+             float size,
+             float mass
+    );
 
     ~Particle() = default;
 
@@ -40,56 +30,12 @@ public:
     Particle(Particle&& other) noexcept = default;
 
     Particle& operator=(Particle&& other) noexcept = default;
+    
+    void update();
 
+    void draw() const;
 
-    void update()
-    {
-        if (active)
-        {
-            const auto distanceToCenter = Vector2Subtract(
-                position,
-                Vector2 {
-                    static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
-                    static_cast<float>(cfg.getConfig()["screenHeight"]) / 2.0f
-                }
-            );
-            const auto distanceMag = Vector2Length(distanceToCenter);
-            const auto colorShift = Remap(
-                distanceMag, // Input
-                static_cast<float>(cfg.getConfig()["screenWidth"]) * 0.6f, // Input min
-                0.0f, // Input max
-                0.0f, // Output min
-                255.0f // Output max
-            );
-
-            velocity = Vector2Add(velocity, acceleration);
-            position = Vector2Add(position, velocity);
-
-            acceleration *= 0.0f;
-
-            color.g = static_cast<unsigned char>(colorShift);
-            color.r = static_cast<unsigned char>(colorShift);
-        }
-    }
-
-    void draw() const
-    {
-        if (active)
-        {
-            DrawCircle(
-                static_cast<int>(position.x),
-                static_cast<int>(position.y),
-                size,
-                color
-            );
-        }
-    }
-
-    void applyForce(Vector2 force)
-    {
-        Vector2 f = Vector2Divide(force, Vector2 { mass, mass });
-        acceleration = Vector2Add(acceleration, f);
-    }
+    void applyForce(Vector2 force);
 
     [[nodiscard]] Vector2 getPosition() const
     {
