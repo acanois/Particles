@@ -40,7 +40,7 @@ public:
                               ? letterBox
                               : static_cast<float>(cfg.getConfig()["screenHeight"] - letterBox);
 
-        particles.emplace_back(
+        particles.push_back(
             std::make_unique<Particle>(
                 Vector2 { xPos, yPos }, // Position
                 velocity, // Velocity

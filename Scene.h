@@ -51,12 +51,12 @@ public:
         st.set_callbacks([&st]() { printf("Thread init: %p.\n", &st); },
                          []() { printf("Thread cleanup.\n"); });
 
-        std::atomic<int> noteOn { 0 };
+        std::atomic noteOn { 0 };
 
         st.add_method("/note_on", "i",
                       [&noteOn] (lo_arg** argv, int)
                       {
-                          noteOn = (argv[0]->i);
+                          noteOn = argv[0]->i;
                       });
 
         st.start();
@@ -69,11 +69,10 @@ public:
             ClearBackground(Color { 32, 32, 64, 255 });
 
             const auto currentNote = noteOn.load();
-            if (currentNote != previousNote && previousNote == 0)
-            {
-                particleSystem->addParticle();
-            }
 
+            // if (currentNote != previousNote && previousNote == 0)
+            if (particleSystem->getNumParticles() < 2500)
+                particleSystem->addParticle();
 
             BeginDrawing();
 

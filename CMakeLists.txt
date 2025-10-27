@@ -43,7 +43,9 @@ set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include")
 add_executable(${PROJECT_NAME}
     main.cpp
     Particle.h
+    Particle.cpp
     ParticleSystem.h
+    Particle.cpp
     Attractor.h
     AppConfig.h
 )
