@@ -42,6 +42,8 @@ set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include")
 
 add_executable(${PROJECT_NAME}
     main.cpp
+    Scene.h
+    Scene.cpp
     Particle.h
     Particle.cpp
     ParticleSystem.h
