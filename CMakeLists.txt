@@ -45,6 +45,7 @@ add_executable(${PROJECT_NAME}
     Particle.h
     Particle.cpp
     ParticleSystem.h
+    ParticleSystem.cpp
     Particle.cpp
     Attractor.h
     AppConfig.h
