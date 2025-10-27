@@ -29,8 +29,8 @@ void Scene::run() const
 {
     lo::ServerThread st(7000);
 
-    st.set_callbacks([&st]() { printf("Thread init: %p.\n", &st); },
-                     []() { printf("Thread cleanup.\n"); });
+    st.set_callbacks([&st] { printf("Thread init: %p.\n", &st); },
+                     [] { printf("Thread cleanup.\n"); });
 
     std::atomic noteOn { 0 };
 
