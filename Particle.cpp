@@ -5,12 +5,12 @@
 #include "Particle.h"
 
 Particle::Particle(const Vector3 position,
-         const Vector3 velocity,
-         const Vector3 acceleration,
-         const Color color,
-         const float alpha,
-         const float size,
-         const float mass
+                   const Vector3 velocity,
+                   const Vector3 acceleration,
+                   const Color color,
+                   const float alpha,
+                   const float size,
+                   const float mass
 ) : position(position),
     velocity(velocity),
     acceleration(acceleration),
@@ -59,7 +59,7 @@ void Particle::draw() const
     {
         DrawCircle3D(
             position,
-            size * 0.5f,
+            size * 0.1f,
             Vector3 { 0.0f, 1.0f, 0.0f },
             0.0f,
             RAYWHITE

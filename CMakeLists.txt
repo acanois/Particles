@@ -38,7 +38,7 @@ find_package(liblo CONFIG REQUIRED)
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Shaders directory
-#set(SHADERS_DIR resources/shaders)
+set(SHADERS_DIR resources/shaders)
 
 add_executable(${PROJECT_NAME}
     main.cpp

@@ -34,9 +34,9 @@ Scene::~Scene()
 
 void Scene::run() const
 {
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-    auto frameCount = 0;
+    SetConfigFlags(FLAG_MSAA_4X_HINT);
 
+    auto frameCount = 0;
     while (!WindowShouldClose())
     {
         ClearBackground(Color { 32, 32, 64, 255 });
