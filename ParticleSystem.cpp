@@ -4,6 +4,8 @@
 
 #include "ParticleSystem.h"
 
+#include <iostream>
+
 ParticleSystem::ParticleSystem(const Vector3 position)
     : position(position),
       attractor(
@@ -16,11 +18,19 @@ ParticleSystem::ParticleSystem(const Vector3 position)
 
 void ParticleSystem::addParticle()
 {
-    const auto velocityDirection = GetRandomValue(0, 1) ? -0.05f : 0.05f;
+    auto xVel = static_cast<float>(GetRandomValue(0, 1000)) / 1000.0f * 5.0f * 0.01f;
+    const auto direction = GetRandomValue(0, 1) ? -1.0f : 1.0f;
+    const auto xVelDirection = xVel * direction;
+
+    if (xVelDirection < 0.0f)
+        xVel = -xVel;
+
+    const auto zVelDirection = 0.05f - xVel * direction;
+
     auto velocity = Vector3 {
-        velocityDirection,
+        xVelDirection,
         0.0f,
-        velocityDirection
+        zVelDirection
     };
 
     particles.push_back(
