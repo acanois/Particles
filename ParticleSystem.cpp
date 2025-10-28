@@ -30,12 +30,12 @@ void ParticleSystem::addParticle()
     auto velocity = Vector3 {
         xVelDirection,
         0.0f,
-        zVelDirection
+        -zVelDirection
     };
 
     particles.push_back(
         std::make_unique<Particle>(
-            Vector3 { 0.0f, 33.0f, 0.0f }, // Position
+            Vector3 { 0.0f, 27.0f, 0.0f }, // Position
             velocity, // Velocity
             Vector3 { 0.0f, 0.0f, 0.0f }, // Acceleration
             Color { 255, 255, 255, 255 }, // Color

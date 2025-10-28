@@ -49,8 +49,7 @@ void Scene::run() const
 
         camera->beginMode3D();
 
-        // const auto cubeScale = Vector3 { 2.0f, 2.0f, 2.0f };
-        // DrawCubeV(cubePosition, cubeScale, DARKGRAY);
+        DrawSphere(Vector3 {0.0f, 0.0f, 0.0f}, 24.0f, DARKBLUE);
 
         particleSystem->run();
 
