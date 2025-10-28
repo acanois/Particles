@@ -6,11 +6,11 @@
 
 Scene::Scene()
     : camera(std::make_unique<SceneCamera>(
-          Vector3 { 0.0f, 0.0f, -1000.0f },
-          Vector3 { 0.0f, 0.0f, 0.0f },
-          Vector3 { 0.0f, 1.0f, 0.0f },
-          45.0f,
-          CAMERA_PERSPECTIVE
+          Vector3 { 0.0f, 0.0f, -80.0f }, // position
+          Vector3 { 0.0f, 0.0f, 0.0f }, // target
+          Vector3 { 0.0f, 1.0f, 0.0f }, // up
+          45.0f, // fovy
+          CAMERA_PERSPECTIVE // mode
       )),
       particleSystem(std::make_unique<ParticleSystem>(
           Vector3 {
@@ -42,12 +42,15 @@ void Scene::run() const
         ClearBackground(Color { 32, 32, 64, 255 });
 
         // if (currentNote != previousNote && previousNote == 0)
-        if (particleSystem->getNumParticles() < 2500)
+        if (particleSystem->getNumParticles() < 2500 && frameCount % 5 == 0)
             particleSystem->addParticle();
 
         BeginDrawing();
 
         camera->beginMode3D();
+
+        // const auto cubeScale = Vector3 { 2.0f, 2.0f, 2.0f };
+        // DrawCubeV(cubePosition, cubeScale, DARKGRAY);
 
         particleSystem->run();
 

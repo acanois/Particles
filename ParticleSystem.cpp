@@ -5,40 +5,32 @@
 #include "ParticleSystem.h"
 
 ParticleSystem::ParticleSystem(const Vector3 position)
-        : position(position),
-          attractor(
-              std::make_unique<Attractor>(
-                  Vector3 { 0.0f, 0.0f, 0.0f },
-                  0.005f
-              ))
+    : position(position),
+      attractor(
+          std::make_unique<Attractor>(
+              Vector3 { 0.0f, 0.0f, 0.0f },
+              0.005f
+          ))
 {
 }
 
 void ParticleSystem::addParticle()
 {
-    const auto velocityScale = 1.0f;
-    const auto startVelocity = static_cast<float>(GetRandomValue(0, 1000)) / 1000.0f;
-    const auto direction = GetRandomValue(0, 1) == 0 ? -1.0f : 1.0f;
-    const auto alpha = static_cast<unsigned char>(GetRandomValue(100, 255));
+    const auto velocityDirection = GetRandomValue(0, 1) ? -0.05f : 0.05f;
     auto velocity = Vector3 {
-        velocityScale * startVelocity * direction,
-        0.0f
+        velocityDirection,
+        0.0f,
+        velocityDirection
     };
-
-    // const auto letterBox = 20;
-    // const auto xPos = static_cast<float>(GetRandomValue(0, 1280));
-    // const auto yPos = GetRandomValue(0, 1) == 0
-    //                       ? letterBox
-    //                       : static_cast<float>(cfg.getConfig()["screenHeight"] - letterBox);
 
     particles.push_back(
         std::make_unique<Particle>(
-            Vector3 { 0.0f, 0.0f, 0.0f }, // Position
+            Vector3 { 0.0f, 33.0f, 0.0f }, // Position
             velocity, // Velocity
             Vector3 { 0.0f, 0.0f, 0.0f }, // Acceleration
-            Color { 255, 255, 255, alpha }, // Color
+            Color { 255, 255, 255, 255 }, // Color
             1.0f, // Alpha
-            3.0f, // Size
+            1.0f, // Size
             1.0f // Mass
         ));
 }

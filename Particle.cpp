@@ -57,11 +57,12 @@ void Particle::draw() const
 {
     if (active)
     {
-        DrawCircle(
-            static_cast<int>(position.x),
-            static_cast<int>(position.y),
-            size,
-            color
+        DrawCircle3D(
+            position,
+            size * 0.5f,
+            Vector3 { 0.0f, 1.0f, 0.0f },
+            0.0f,
+            RAYWHITE
         );
     }
 }
