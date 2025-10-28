@@ -10,6 +10,7 @@
 #include "raylib.h"
 
 #include "AppConfig.h"
+#include "SceneCamera.h"
 #include "ParticleSystem.h"
 
 class Scene
@@ -32,5 +33,6 @@ public:
 private:
     AppConfig& cfg = AppConfig::getInstance();
 
+    std::unique_ptr<SceneCamera> camera { nullptr };
     std::unique_ptr<ParticleSystem> particleSystem { nullptr };
 };

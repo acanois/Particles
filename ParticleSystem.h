@@ -13,7 +13,7 @@
 class ParticleSystem
 {
 public:
-    explicit ParticleSystem(Vector2 position);
+    explicit ParticleSystem(Vector3 position);
 
     void addParticle();
 
@@ -27,7 +27,7 @@ public:
 private:
     AppConfig& cfg = AppConfig::getInstance();
 
-    Vector2 position;
+    Vector3 position;
 
     std::vector<std::unique_ptr<Particle> > particles;
 

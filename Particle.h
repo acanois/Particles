@@ -12,9 +12,9 @@
 class Particle
 {
 public:
-    Particle(Vector2 position,
-             Vector2 velocity,
-             Vector2 acceleration,
+    Particle(Vector3 position,
+             Vector3 velocity,
+             Vector3 acceleration,
              Color color,
              float alpha,
              float size,
@@ -35,9 +35,9 @@ public:
 
     void draw() const;
 
-    void applyForce(Vector2 force);
+    void applyForce(Vector3 force);
 
-    [[nodiscard]] Vector2 getPosition() const
+    [[nodiscard]] Vector3 getPosition() const
     {
         return position;
     }
@@ -55,9 +55,9 @@ public:
 private:
     AppConfig& cfg = AppConfig::getInstance();
 
-    Vector2 position;
-    Vector2 velocity;
-    Vector2 acceleration;
+    Vector3 position;
+    Vector3 velocity;
+    Vector3 acceleration;
 
     Color color;
 

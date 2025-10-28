@@ -52,6 +52,7 @@ add_executable(${PROJECT_NAME}
     Attractor.h
     AppConfig.h
     OscHandler.h
+    SceneCamera.h
 )
 
 # Sources

@@ -4,9 +4,9 @@
 
 #include "Particle.h"
 
-Particle::Particle(const Vector2 position,
-         const Vector2 velocity,
-         const Vector2 acceleration,
+Particle::Particle(const Vector3 position,
+         const Vector3 velocity,
+         const Vector3 acceleration,
          const Color color,
          const float alpha,
          const float size,
@@ -27,14 +27,14 @@ void Particle::update()
 {
     if (active)
     {
-        const auto distanceToCenter = Vector2Subtract(
+        const auto distanceToCenter = Vector3Subtract(
             position,
-            Vector2 {
+            Vector3 {
                 static_cast<float>(cfg.getConfig()["screenWidth"]) / 2.0f,
                 static_cast<float>(cfg.getConfig()["screenHeight"]) / 2.0f
             }
         );
-        const auto distanceMag = Vector2Length(distanceToCenter);
+        const auto distanceMag = Vector3Length(distanceToCenter);
         const auto colorShift = Remap(
             distanceMag, // Input
             static_cast<float>(cfg.getConfig()["screenWidth"]) * 0.6f, // Input min
@@ -43,8 +43,8 @@ void Particle::update()
             255.0f // Output max
         );
 
-        velocity = Vector2Add(velocity, acceleration);
-        position = Vector2Add(position, velocity);
+        velocity = Vector3Add(velocity, acceleration);
+        position = Vector3Add(position, velocity);
 
         acceleration *= 0.0f;
 
@@ -66,8 +66,8 @@ void Particle::draw() const
     }
 }
 
-void Particle::applyForce(const Vector2 force)
+void Particle::applyForce(const Vector3 force)
 {
-    const Vector2 f = Vector2Divide(force, Vector2 { mass, mass });
-    acceleration = Vector2Add(acceleration, f);
+    const Vector3 f = Vector3Divide(force, Vector3 { mass, mass, mass });
+    acceleration = Vector3Add(acceleration, f);
 }
