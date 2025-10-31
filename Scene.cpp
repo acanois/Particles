@@ -4,9 +4,14 @@
 
 #include "Scene.h"
 
+#include "raylib.h"
+
+#define RLIGHTS_IMPLEMENTATION
+#include "rlights.h"
+
 Scene::Scene()
     : camera(std::make_unique<SceneCamera>(
-          Vector3 { 0.0f, 0.0f, -80.0f }, // position
+          Vector3 { 0.0f, 0.0f, -10.0f }, // position
           Vector3 { 0.0f, 0.0f, 0.0f }, // target
           Vector3 { 0.0f, 1.0f, 0.0f }, // up
           45.0f, // fovy
@@ -36,22 +41,58 @@ void Scene::run() const
 {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
 
+    const Shader shader = LoadShader(
+        TextFormat("resources/shaders/lighting.vs", 330),
+        TextFormat("resources/shaders/lighting.fs", 330)
+    );
+
+    shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
+
+    // Ambient light level (some basic lighting)
+    const int ambientLoc = GetShaderLocation(shader, "ambient");
+    SetShaderValue(shader, ambientLoc, (float[4]) { 0.1f, 0.1f, 0.1f, 1.0f }, SHADER_UNIFORM_VEC4);
+
+    Light light = CreateLight(
+        LIGHT_POINT,
+        Vector3 { -2.0f, 0.0f, -2.0f },
+        Vector3Zero(),
+        GREEN,
+        shader
+    );
+    light.enabled = true;
     auto frameCount = 0;
     while (!WindowShouldClose())
     {
-        ClearBackground(Color { 32, 32, 64, 255 });
+        auto [x, y, z] = camera->getCamera().position;
 
+        const float cameraPos[3] = { x, y, z };
+
+        SetShaderValue(
+            shader,
+            shader.locs[SHADER_LOC_VECTOR_VIEW],
+            cameraPos,
+            SHADER_UNIFORM_VEC3
+        );
+        if (IsKeyPressed(KEY_G)) { light.enabled = !light.enabled; }
         // if (currentNote != previousNote && previousNote == 0)
         if (particleSystem->getNumParticles() < 2500 && frameCount % 5 == 0)
             particleSystem->addParticle();
 
         BeginDrawing();
 
+        ClearBackground(Color { 32, 32, 64, 255 });
+
         camera->beginMode3D();
 
-        DrawSphere(Vector3 {0.0f, 0.0f, 0.0f}, 24.0f, DARKBLUE);
+        BeginShaderMode(shader);
 
-        particleSystem->run();
+        // DrawSphere(Vector3 { 0.0f, 0.0f, 0.0f }, 1.0f, WHITE);
+        DrawCubeV(Vector3Zero(), Vector3 { 1.0f, 1.0f, 1.0f }, WHITE);
+        EndShaderMode();
+
+        // particleSystem->run();
+
+        DrawSphereEx(light.position, 0.2f, 8, 8, light.color);
 
         SceneCamera::endMode3D();
 

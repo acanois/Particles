@@ -4,10 +4,7 @@
 
 #pragma once
 
-#include <lo/lo.h>
 #include <lo/lo_cpp.h>
-
-#include "raylib.h"
 
 #include "AppConfig.h"
 #include "SceneCamera.h"

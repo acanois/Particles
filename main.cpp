@@ -2,7 +2,6 @@
 
 #include "Scene.h"
 
-
 int main()
 {
     const auto scene = std::make_unique<Scene>();

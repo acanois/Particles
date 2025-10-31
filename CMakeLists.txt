@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}
     AppConfig.h
     OscHandler.h
     SceneCamera.h
+    rlights.h
 )
 
 # Sources
@@ -60,6 +61,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 
 # Include
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SHADERS_DIR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${RAYLIB_LIB})
@@ -69,5 +71,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE liblo::liblo liblo::liblo_static)
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
     ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+    SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources/shaders"
 )
 
