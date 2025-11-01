@@ -42,8 +42,8 @@ void Scene::run() const
     SetConfigFlags(FLAG_MSAA_4X_HINT);
 
     const Shader shader = LoadShader(
-        TextFormat("resources/shaders/lighting.vs", 330),
-        TextFormat("resources/shaders/lighting.fs", 330)
+        TextFormat("%s/lighting.vs", SHADER_PATH, 330),
+        TextFormat("%s/lighting.fs", SHADER_PATH, 330)
     );
 
     shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
@@ -52,17 +52,17 @@ void Scene::run() const
     const int ambientLoc = GetShaderLocation(shader, "ambient");
     SetShaderValue(shader, ambientLoc, (float[4]) { 0.1f, 0.1f, 0.1f, 1.0f }, SHADER_UNIFORM_VEC4);
 
-    Light light = CreateLight(
-        LIGHT_POINT,
-        Vector3 { -2.0f, 0.0f, -2.0f },
-        Vector3Zero(),
-        GREEN,
-        shader
-    );
-    light.enabled = true;
+    Light lights[MAX_LIGHTS] = { 0 };
+    lights[0] = CreateLight(LIGHT_POINT, (Vector3) { -2, 1, -2 }, Vector3Zero(), YELLOW, shader);
+    lights[1] = CreateLight(LIGHT_POINT, (Vector3) { 2, 1, 2 }, Vector3Zero(), RED, shader);
+    lights[2] = CreateLight(LIGHT_POINT, (Vector3) { -2, 1, 2 }, Vector3Zero(), GREEN, shader);
+    lights[3] = CreateLight(LIGHT_POINT, (Vector3) { 2, 1, -2 }, Vector3Zero(), BLUE, shader);
+
     auto frameCount = 0;
+
     while (!WindowShouldClose())
     {
+        UpdateCamera(&camera->getCamera(), CAMERA_ORBITAL);
         auto [x, y, z] = camera->getCamera().position;
 
         const float cameraPos[3] = { x, y, z };
@@ -73,10 +73,16 @@ void Scene::run() const
             cameraPos,
             SHADER_UNIFORM_VEC3
         );
-        if (IsKeyPressed(KEY_G)) { light.enabled = !light.enabled; }
+        if (IsKeyPressed(KEY_Y)) { lights[0].enabled = !lights[0].enabled; }
+        if (IsKeyPressed(KEY_R)) { lights[1].enabled = !lights[1].enabled; }
+        if (IsKeyPressed(KEY_G)) { lights[2].enabled = !lights[2].enabled; }
+        if (IsKeyPressed(KEY_B)) { lights[3].enabled = !lights[3].enabled; }
+
+        for (const auto& light: lights) UpdateLightValues(shader, light);
+
         // if (currentNote != previousNote && previousNote == 0)
-        if (particleSystem->getNumParticles() < 2500 && frameCount % 5 == 0)
-            particleSystem->addParticle();
+        // if (particleSystem->getNumParticles() < 2500 && frameCount % 5 == 0)
+        //     particleSystem->addParticle();
 
         BeginDrawing();
 
@@ -86,13 +92,18 @@ void Scene::run() const
 
         BeginShaderMode(shader);
 
-        // DrawSphere(Vector3 { 0.0f, 0.0f, 0.0f }, 1.0f, WHITE);
-        DrawCubeV(Vector3Zero(), Vector3 { 1.0f, 1.0f, 1.0f }, WHITE);
+        DrawSphere(Vector3 { 0.0f, 0.0f, 0.0f }, 1.0f, WHITE);
+        // DrawCubeV(Vector3Zero(), Vector3 { 1.0f, 1.0f, 1.0f }, WHITE);
+
         EndShaderMode();
 
         // particleSystem->run();
 
-        DrawSphereEx(light.position, 0.2f, 8, 8, light.color);
+        for (const auto& light: lights)
+        {
+            if (light.enabled) DrawSphereEx(light.position, 0.2f, 8, 8, light.color);
+            else DrawSphereWires(light.position, 0.2f, 8, 8, ColorAlpha(light.color, 0.3f));
+        }
 
         SceneCamera::endMode3D();
 
@@ -112,4 +123,6 @@ void Scene::run() const
 
         ++frameCount;
     }
+
+    UnloadShader(shader);
 }
